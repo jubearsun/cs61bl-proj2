@@ -7,8 +7,6 @@ import java.util.TreeMap;
 
 public class HuffmanEncoding {
 
-	private ArrayList<String> myChars;
-	private ArrayList<Integer> myWeights;
 	private ArrayList<Frequency> myFreq;
 
 	public static void main(String[] args) {  // the main method right now is set up to test sorting items, just get rid of stuff if you want to do other testing
@@ -24,27 +22,22 @@ public class HuffmanEncoding {
 		for (Frequency element: encode.myFreq) {
 			System.out.println(element.myString + " has a frequency of " + element.myWeight);
 		}
+		System.out.println(encode.myFreq.size());
 	}
 
 	public void characterCount(String input) { 
 		FileCharIterator inputIter = new FileCharIterator(input);
 		myFreq = new ArrayList<Frequency>();
-		myChars = new ArrayList<String>();			// contains each unique byte,
-		myWeights = new ArrayList<Integer>();		// contains the frequency of each unique byte at the corresponding index
-		while (inputIter.hasNext()) {				// ^ there's probably a better way to do this
+		outerloop:
+		while (inputIter.hasNext()) {
 			String current = inputIter.next();
-			if (myChars.contains(current)) {
-				int holdIndex = myChars.indexOf(current);
-				int holdValue = myWeights.get(myChars.indexOf(current));
-				myWeights.remove(myChars.indexOf(current));
-				myWeights.add(holdIndex, holdValue + 1);
-			} else {
-				myChars.add(current);
-				myWeights.add(1);
+			for (Frequency element: myFreq) {
+				if (element.getString().equals(current)) {
+					element.setWeight(element.getWeight() + 1);
+					continue outerloop;
+				}	
 			}
-		}
-		for (int i = 0; i < myWeights.size(); i++) { // uses myChar and myWeights to make an array of Frequency objects
-			myFreq.add(new Frequency(myWeights.get(i), myChars.get(i)));
+			myFreq.add(new Frequency(1, current));	
 		}
 	}
 
@@ -64,13 +57,21 @@ public class HuffmanEncoding {
 
 		public int compareTo(Frequency o) { // special compareTo method for comparing Frequency objects
 			return (myWeight - o.myWeight);
-		}	
+		}
+		
+		public void setWeight(int weight) {
+			myWeight = weight;
+		}
+		
+		public int getWeight() {
+			return myWeight;
+		}
+		
+		public String getString() {
+			return myString;
+		}
+		
 	}
-	
-	
-	
-	
-	
 
 	public class HuffmanTree {
 		
