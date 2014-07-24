@@ -1,28 +1,33 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Stack;
 import java.util.TreeMap;
 
 
 public class HuffmanEncoding {
 
 	private ArrayList<Frequency> myFreq;
+	private TreeMap<String, StringBuilder> myTreeMap;
 
-	public static void main(String[] args) {  // the main method right now is set up to test sorting items, just get rid of stuff if you want to do other testing
+	public static void main(String[] args) { 
 		// TODO Auto-generated method stub
 		String myFile = args[0];	
 		HuffmanEncoding encode = new HuffmanEncoding();
 		encode.characterCount(myFile);
-		for (Frequency element: encode.myFreq) {
-			System.out.println(element.myString + " has a frequency of " + element.myWeight);
-		}
-		System.out.println("--------------BREAK------------");
 		encode.sortFreq();
-		for (Frequency element: encode.myFreq) {
-			System.out.println(element.myString + " has a frequency of " + element.myWeight);
+		HuffmanTree myTree = encode.generateHuffmanTree();
+		encode.generateCodeMap(myTree);
+		int i = 0;
+		for(Entry<String, StringBuilder> entry : encode.myTreeMap.entrySet()) {
+			i++;  
+			String key = entry.getKey();
+			StringBuilder value = entry.getValue();
+			System.out.println("(" + key + ", " + value + ")");
 		}
-		System.out.println(encode.myFreq.size());
+		System.out.println(i);
 	}
 
 	public void characterCount(String input) { 
@@ -40,12 +45,27 @@ public class HuffmanEncoding {
 			myFreq.add(new Frequency(1, current));	
 		}
 	}
-
-	public void sortFreq() { // sorts a set of frequency objects by weight
+	
+	public void sortFreq() { 
 		Collections.sort(myFreq);
 	}
+	
+	public HuffmanTree generateHuffmanTree() {
+		return new HuffmanTree(myFreq);
+	}
+	
+	public void generateCodeMap(HuffmanTree myTree) {
+		myTreeMap = new TreeMap<String, StringBuilder>();
+		if (myTree.myRoot == null) {
+			return;
+		} else {
+			StringBuilder myString1 = new StringBuilder();
+			StringBuilder myString2 = new StringBuilder();
+			myTree.codeMapHelper(myTree.myRoot, myString1, myTree.myRoot);
+			}
+		}
 
-	public class Frequency implements Comparable<Frequency>{ // Frequency object stores a weight, and the byte as a String
+	public class Frequency implements Comparable<Frequency> { 
 
 		private int myWeight;
 		private String myString;
@@ -55,7 +75,7 @@ public class HuffmanEncoding {
 			myString = symbol; 
 		}
 
-		public int compareTo(Frequency o) { // special compareTo method for comparing Frequency objects
+		public int compareTo(Frequency o) { 
 			return (myWeight - o.myWeight);
 		}
 		
@@ -70,7 +90,6 @@ public class HuffmanEncoding {
 		public String getString() {
 			return myString;
 		}
-		
 	}
 
 	public class HuffmanTree {
@@ -81,20 +100,26 @@ public class HuffmanEncoding {
 			myRoot = null;
 		}
 		
-		
 		public HuffmanTree(HuffmanNode node) {
 			myRoot = node;
 		}
-		
-		
-		public class weightComparator implements Comparator<HuffmanNode> {
 
-			@Override
-			public int compare(HuffmanNode o1, HuffmanNode o2) {
-				return o1.weight - o2.weight;
+		public void codeMapHelper(HuffmanNode myNode, StringBuilder myString, HuffmanNode start) {
+			if (myNode.hasElement() && !myNode.found) {
+				myTreeMap.put(myNode.myElement, myString);
+				myNode.found = true;
+				StringBuilder newString = new StringBuilder("");
+				codeMapHelper(start, newString, start);
 			}
-			
-			
+			if (myNode.myLeft != null && !myNode.myLeft.found) {
+				StringBuilder temp = new StringBuilder(myString);
+				StringBuilder newString = new StringBuilder(myString.append(0));
+				codeMapHelper(myNode.myLeft, newString, start);
+				if (myNode.myRight != null && !myNode.myRight.found) {
+					StringBuilder newString1 = new StringBuilder(temp.append(1));
+					codeMapHelper(myNode.myRight, newString1, start);
+				}
+			} 
 		}
 		
 		public HuffmanTree(ArrayList<Frequency> freq){
@@ -103,69 +128,69 @@ public class HuffmanEncoding {
 				HuffmanNode t = (new HuffmanNode(f.myString, f.myWeight));
 				treeList.add(t);
 			}
-			
-			
 			if (treeList.size() == 1) {
 				myRoot = treeList.get(0);
 			} else {
 				while (treeList.size() > 1) {
+					System.out.println("NEW ITERATION");
+					for (HuffmanNode t: treeList) {
+						System.out.println("(" + t.myElement + ", " + t.myWeight + ")");
+					}
 					HuffmanNode temp1 = treeList.get(0);
 					HuffmanNode temp2 = treeList.get(1);
 					treeList.remove(0);
-					treeList.remove(1);
-					HuffmanNode fused = new HuffmanNode(temp1.weight + temp2.weight, temp1, temp2);
+					treeList.remove(0);
+					HuffmanNode fused = new HuffmanNode(temp1.myWeight + temp2.myWeight, temp1, temp2);
 					treeList.add(fused);
-					Collections.sort(treeList, new weightComparator());
+					Collections.sort(treeList);
+					if (treeList.size() == 1) {
+						System.out.println("LAST ITERATION");
+						for (HuffmanNode t: treeList) {
+							System.out.println("(" + t.myElement + ", " + t.myWeight + ")");
+						}
+					}
 				}
-			
+				
 				myRoot = treeList.get(0);
-			
 			}
-			
 		}
 		
-		
-
-		public class HuffmanNode {
-			private int weight;
-			private String element;
+		public class HuffmanNode implements Comparable<HuffmanNode> { 
+			private int myWeight;
+			private String myElement;
 			private HuffmanNode myLeft;
 			private HuffmanNode myRight;
+			private boolean found = false;
 
-			public HuffmanNode (String character, int frequency) { // a Leaf
-				element = character;
-				weight = frequency;
+			public HuffmanNode (String character, int frequency) {
+				myElement = character;
+				myWeight = frequency;
 				myLeft = null;
 				myRight = null;
 			}
 
-			public HuffmanNode (int frequency, HuffmanNode left, HuffmanNode right) { // an Internal Node
-				element = null;
-				weight = frequency;
+			public HuffmanNode (int frequency, HuffmanNode left, HuffmanNode right) {
+				myElement = null;
+				myWeight = frequency;
 				myLeft = left;
 				myRight = right;
 			}
-
-
-//				this seems like the general idea for constructing a huffman tree, it's also iterative (I think recursive might give us system out of memory error)
-//				https://www.siggraph.org/education/materials/HyperGraph/video/mpeg/mpegfaq/huffman_tutorial.html
-//				I made this class last night, I'm not sure exactly what it should look like? Feel free to change shit.
-//				If you can think of an easier/cleaner way to implement the "finding characters/frequencies" lemme know, but I tried
-//				doing a TreeMap earlier and ran into trouble, so far having a Frequency class seems to work and it's decently fast 
-//				
-//				on another note, at this point the ArrayList myFreq should have a list of Frequency objects, in order of increasing frequency, so 
-//				I think the method described in that link should work fine?
-
-
-			public int weight() {
-				return weight;
+			
+			public String toString() {
+				return ("(" + myElement + ", " + myWeight + ")" );
 			}
-
+			
 			public boolean hasElement() {
-				return (element == null);
+				return !(myElement == null);
+			}
+			
+			public int compareTo(HuffmanNode arg0) {
+ 				if (myWeight - arg0.myWeight == 0) {
+					return -1;
+				}
+				return myWeight - arg0.myWeight;
 			}
 		}
 	}
 }
-
 
