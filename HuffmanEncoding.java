@@ -12,7 +12,7 @@ public class HuffmanEncoding {
 	private ArrayList<Frequency> myFreq;
 	private TreeMap<String, StringBuilder> myTreeMap;
 
-	public static void main(String[] args) { 
+	public static void main(String[] args) throws IOException{ 
 		// TODO Auto-generated method stub
 		String myFile = args[0];	
 		HuffmanEncoding encode = new HuffmanEncoding();
@@ -28,6 +28,8 @@ public class HuffmanEncoding {
 			System.out.println("(" + key + ", " + value + ")");
 		}
 		System.out.println(i);
+		encode.encodeSequence(myFile);
+
 	}
 
 	public void characterCount(String input) { 
@@ -68,12 +70,13 @@ public class HuffmanEncoding {
 	
 	
 	
-	public void encodeSequence(String sequence) {
+	public void encodeSequence(String sequence) throws IOException {
 		FileCharIterator sequenceIter = new FileCharIterator(sequence);
 		StringBuilder encoded = new StringBuilder();
 		while (sequenceIter.hasNext()) {
 			String binString = sequenceIter.next();
-			encoded.append(myTreeMap.get(binString).toString());
+			String code = myTreeMap.get(binString).toString();
+			encoded.append(code);
 		}
 		encoded.append(myTreeMap.get("EOF"));
 		if (encoded.length() % 8 != 0) {
@@ -81,7 +84,17 @@ public class HuffmanEncoding {
 				encoded.append(0);
 			}
 		}
-		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded");
+		
+		FileWriter f = new FileWriter("encoded.txt", true);
+		BufferedWriter b = new BufferedWriter(f);
+		b.write(codemapString());
+		b.close();
+		//the code above adds in a string representation of the code map before the encoded text 
+		//can be moved later
+		
+		
+		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded.txt");
+		
 	}
 	
 	public String codemapString() {
