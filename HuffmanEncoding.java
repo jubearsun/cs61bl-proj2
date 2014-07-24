@@ -64,6 +64,32 @@ public class HuffmanEncoding {
 			myTree.codeMapHelper(myTree.myRoot, myString1, myTree.myRoot);
 			}
 		}
+		
+	
+	
+	
+	public void encodeSequence(String sequence) {
+		StringBuilder encoded = new StringBuilder();
+		for (int index = 0; index < sequence.length(); index++) {
+			char current = sequence.charAt(index);
+			String binString = Integer.toBinaryString((int) current);
+			if (binString.length() < 8) {
+				while (binString.length() != 8) {
+					binString = "0" + binString;
+				}
+			}
+			encoded.append(myTreeMap.get(binString).toString());
+		}
+		encoded.append(myTreeMap.get("EOF"));
+		if (encoded.length() % 8 != 0) {
+			while ((encoded.length() % 8) != 0) {
+				encoded.append(0);
+			}
+			System.out.println(encoded);
+		}
+		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded");
+	}
+
 
 	public class Frequency implements Comparable<Frequency> { 
 
