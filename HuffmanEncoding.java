@@ -69,15 +69,10 @@ public class HuffmanEncoding {
 	
 	
 	public void encodeSequence(String sequence) {
+		FileCharIterator sequenceIter = new FileCharIterator(sequence);
 		StringBuilder encoded = new StringBuilder();
-		for (int index = 0; index < sequence.length(); index++) {
-			char current = sequence.charAt(index);
-			String binString = Integer.toBinaryString((int) current);
-			if (binString.length() < 8) {
-				while (binString.length() != 8) {
-					binString = "0" + binString;
-				}
-			}
+		while (sequenceIter.hasNext()) {
+			String binString = sequenceIter.next();
 			encoded.append(myTreeMap.get(binString).toString());
 		}
 		encoded.append(myTreeMap.get("EOF"));
@@ -85,7 +80,6 @@ public class HuffmanEncoding {
 			while ((encoded.length() % 8) != 0) {
 				encoded.append(0);
 			}
-			System.out.println(encoded);
 		}
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded");
 	}
