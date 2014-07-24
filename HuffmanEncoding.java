@@ -83,6 +83,16 @@ public class HuffmanEncoding {
 		}
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded");
 	}
+	
+	public String codemapString() {
+		StringBuilder codemap = new StringBuilder();
+		for (Map.Entry<String, StringBuilder> entry : myTreeMap.entrySet()) {
+			String key = entry.getKey();
+			StringBuilder value = entry.getValue();
+			codemap.append(key + "," + value + "\n");
+		}
+		return codemap.toString();
+	}
 
 
 	public class Frequency implements Comparable<Frequency> { 
