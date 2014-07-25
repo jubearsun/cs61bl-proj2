@@ -4,14 +4,14 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
+
 public class HuffmanEncoding {
 
 	private ArrayList<Frequency> myFreq;
 	private TreeMap<String, StringBuilder> myTreeMap;
+	private TreeMap<String, String> myDecodeMap;
 
-		private TreeMap<String, String> myDecodeMap;
-
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		// TODO Auto-generated method stub
 		String myFile = args[0];	
@@ -115,7 +115,10 @@ public class HuffmanEncoding {
 			myTree.codeMapHelper(myTree.myRoot, myString1, myTree.myRoot);
 			}
 		}
-
+		
+	
+	
+	
 	public void encodeSequence(String sequence) throws IOException {
 		FileCharIterator sequenceIter = new FileCharIterator(sequence);
 		StringBuilder encoded = new StringBuilder();
@@ -137,7 +140,10 @@ public class HuffmanEncoding {
 		b.close();
 		//the code above adds in a string representation of the code map before the encoded text 
 		//can be moved later
+		
+		
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded.txt");
+		
 	}
 	
 	public String codemapString() {
@@ -149,7 +155,8 @@ public class HuffmanEncoding {
 		}
 		return codemap.toString();
 	}
-	
+
+
 	public class Frequency implements Comparable<Frequency> { 
 
 		private int myWeight;
