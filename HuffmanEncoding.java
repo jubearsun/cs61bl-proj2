@@ -1,35 +1,85 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Stack;
 import java.util.TreeMap;
-
 
 public class HuffmanEncoding {
 
 	private ArrayList<Frequency> myFreq;
 	private TreeMap<String, StringBuilder> myTreeMap;
 
-	public static void main(String[] args) throws IOException{ 
+		private TreeMap<String, String> myDecodeMap;
+
+	public static void main(String[] args) {
+		
 		// TODO Auto-generated method stub
 		String myFile = args[0];	
 		HuffmanEncoding encode = new HuffmanEncoding();
-		encode.characterCount(myFile);
-		encode.sortFreq();
-		HuffmanTree myTree = encode.generateHuffmanTree();
-		encode.generateCodeMap(myTree);
-		int i = 0;
-		for(Entry<String, StringBuilder> entry : encode.myTreeMap.entrySet()) {
-			i++;  
-			String key = entry.getKey();
-			StringBuilder value = entry.getValue();
-			System.out.println("(" + key + ", " + value + ")");
+		encode.makeDecodeMap(myFile);
+		encode.decode(myFile, "Test");
+//		encode.characterCount(myFile);
+//		encode.sortFreq();
+//		HuffmanTree myTree = encode.generateHuffmanTree();
+//		encode.generateCodeMapTree(myTree);
+//		System.out.println(encode.myTreeMap);
+	}
+	
+	public void makeDecodeMap(String file) {
+		ArrayList<String> keysValues = new ArrayList<String>();
+		String current = new String();
+		char prev = 0;
+		FileCharIterator decode = new FileCharIterator(file);
+		while (decode.hasNext()) {
+			char a = (char) Integer.parseInt(decode.next(), 2);
+			if ( a != (',' ) && a != ('\n')) {
+				current += a;
+			}
+			if (a == ('\n') && prev == ('\n')){
+				System.out.println(current);
+				break;
+			}
+			if (a == (',') || a == ('\n')) {
+				keysValues.add(current);
+				current = "";
+			}
+			prev = a;
 		}
-		System.out.println(i);
-		encode.encodeSequence(myFile);
-
+		myDecodeMap = new TreeMap<String, String>();
+		for (int i = 0; i < keysValues.size(); i += 2) {
+			myDecodeMap.put(keysValues.get(i+1), keysValues.get(i));
+		}
+	}
+	
+	public void decode(String input, String output) {
+		FileOutputHelper myOutput = new FileOutputHelper();
+		char prev = 0;
+		FileCharIterator decode = new FileCharIterator(input);
+		while (decode.hasNext()) {
+			char a = (char) Integer.parseInt(decode.next(), 2);
+			if (a == ('\n') && prev == ('\n')){
+				break;
+			}
+			prev = a;
+		}
+		String current = "";
+		int i = 0;
+		int distance = 1;
+		while (decode.hasNext()) {
+			current += decode.next();
+		}
+		while (distance <= current.length()) {
+			if (myDecodeMap.containsKey(current.substring(i, distance))) {
+				if (myDecodeMap.get(current.substring(i, distance)).equals("EOF")) {
+					break;
+				}
+				FileOutputHelper.writeBinStrToFile(myDecodeMap.get(current.substring(i, distance)), output);
+				i = distance;
+				distance = distance + 1;
+			} else {
+			distance++;
+			}
+		}
 	}
 
 	public void characterCount(String input) { 
@@ -62,14 +112,10 @@ public class HuffmanEncoding {
 			return;
 		} else {
 			StringBuilder myString1 = new StringBuilder();
-			StringBuilder myString2 = new StringBuilder();
 			myTree.codeMapHelper(myTree.myRoot, myString1, myTree.myRoot);
 			}
 		}
-		
-	
-	
-	
+
 	public void encodeSequence(String sequence) throws IOException {
 		FileCharIterator sequenceIter = new FileCharIterator(sequence);
 		StringBuilder encoded = new StringBuilder();
@@ -91,10 +137,7 @@ public class HuffmanEncoding {
 		b.close();
 		//the code above adds in a string representation of the code map before the encoded text 
 		//can be moved later
-		
-		
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded.txt");
-		
 	}
 	
 	public String codemapString() {
@@ -106,8 +149,7 @@ public class HuffmanEncoding {
 		}
 		return codemap.toString();
 	}
-
-
+	
 	public class Frequency implements Comparable<Frequency> { 
 
 		private int myWeight;
