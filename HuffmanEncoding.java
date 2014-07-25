@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-
 public class HuffmanEncoding {
 
 	private ArrayList<Frequency> myFreq;
@@ -12,17 +11,24 @@ public class HuffmanEncoding {
 	private TreeMap<String, String> myDecodeMap;
 
 	public static void main(String[] args) throws IOException {
-		
-		// TODO Auto-generated method stub
-		String myFile = args[0];	
-		HuffmanEncoding encode = new HuffmanEncoding();
-		encode.makeDecodeMap(myFile);
-		encode.decode(myFile, "Test");
-//		encode.characterCount(myFile);
-//		encode.sortFreq();
-//		HuffmanTree myTree = encode.generateHuffmanTree();
-//		encode.generateCodeMapTree(myTree);
-//		System.out.println(encode.myTreeMap);
+		if (args[0].equals("encode")) {
+			String myFile = args[1];	
+			HuffmanEncoding encode = new HuffmanEncoding();
+			encode.characterCount(myFile);
+			encode.sortFreq();
+			HuffmanTree myTree = encode.generateHuffmanTree();
+			encode.generateCodeMap(myTree);
+			encode.encodeSequence(myFile, args[2]);
+		}
+		else if (args[0].equals("decode")) {
+			System.out.println("decoding");
+			String myFile = args[1];	
+			HuffmanEncoding decode = new HuffmanEncoding();
+			decode.makeDecodeMap(myFile);
+			decode.decode(myFile, args[2]);
+		} else {
+			System.out.println("invalid command");
+		}
 	}
 	
 	public void makeDecodeMap(String file) {
@@ -96,6 +102,7 @@ public class HuffmanEncoding {
 			}
 			myFreq.add(new Frequency(1, current));	
 		}
+		myFreq.add(new Frequency(1, "EOF"));
 	}
 	
 	public void sortFreq() { 
@@ -116,10 +123,7 @@ public class HuffmanEncoding {
 			}
 		}
 		
-	
-	
-	
-	public void encodeSequence(String sequence) throws IOException {
+	public void encodeSequence(String sequence, String name) throws IOException {
 		FileCharIterator sequenceIter = new FileCharIterator(sequence);
 		StringBuilder encoded = new StringBuilder();
 		while (sequenceIter.hasNext()) {
@@ -133,19 +137,18 @@ public class HuffmanEncoding {
 				encoded.append(0);
 			}
 		}
-		
-		FileWriter f = new FileWriter("encoded.txt", true);
+
+		FileWriter f = new FileWriter(name, true);
 		BufferedWriter b = new BufferedWriter(f);
 		b.write(codemapString());
 		b.close();
-		//the code above adds in a string representation of the code map before the encoded text 
-		//can be moved later
-		
-		
-		FileOutputHelper.writeBinStrToFile(encoded.toString(), "encoded.txt");
-		
+//		the code above adds in a string representation of the code map before the encoded text
+//		can be moved later
+
+		FileOutputHelper.writeBinStrToFile(encoded.toString(), name);
+
 	}
-	
+
 	public String codemapString() {
 		StringBuilder codemap = new StringBuilder();
 		for (Map.Entry<String, StringBuilder> entry : myTreeMap.entrySet()) {
@@ -153,9 +156,9 @@ public class HuffmanEncoding {
 			StringBuilder value = entry.getValue();
 			codemap.append(key + "," + value + "\n");
 		}
+		codemap.append("\n");
 		return codemap.toString();
 	}
-
 
 	public class Frequency implements Comparable<Frequency> { 
 
@@ -224,10 +227,6 @@ public class HuffmanEncoding {
 				myRoot = treeList.get(0);
 			} else {
 				while (treeList.size() > 1) {
-					System.out.println("NEW ITERATION");
-					for (HuffmanNode t: treeList) {
-						System.out.println("(" + t.myElement + ", " + t.myWeight + ")");
-					}
 					HuffmanNode temp1 = treeList.get(0);
 					HuffmanNode temp2 = treeList.get(1);
 					treeList.remove(0);
@@ -235,14 +234,7 @@ public class HuffmanEncoding {
 					HuffmanNode fused = new HuffmanNode(temp1.myWeight + temp2.myWeight, temp1, temp2);
 					treeList.add(fused);
 					Collections.sort(treeList);
-					if (treeList.size() == 1) {
-						System.out.println("LAST ITERATION");
-						for (HuffmanNode t: treeList) {
-							System.out.println("(" + t.myElement + ", " + t.myWeight + ")");
-						}
-					}
 				}
-				
 				myRoot = treeList.get(0);
 			}
 		}
