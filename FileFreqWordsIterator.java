@@ -36,7 +36,8 @@ public class FileFreqWordsIterator implements Iterator<String>{
             }
             
             //need to construct a list of the words sorted by how often they appear.
-            //look into .entrySet() from the HashMap class and SortedSet
+            //look into .entrySet() from the HashMap class and SortedSet/TreeSet. In particular, look at the constructor for TreeSet.
+            //one constructor takes in a collection and sorts them by comparator: http://docs.oracle.com/javase/7/docs/api/java/util/TreeSet.html
             //probably have to override a compareTo method or create a comparator or something
             
             //another way to do it is to write a class similar to the Frequency class we used and write a compareTo method that would determine 
