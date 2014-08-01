@@ -12,16 +12,10 @@ public class HuffmanEncoding {
 
 	public static void main(String[] args) throws IOException {
 		if (args[0].equals("encode")) {
-			String myFile = args[1];	
 			HuffmanEncoding encode = new HuffmanEncoding();
-			encode.characterCount(myFile);
-			encode.sortFreq();
-			HuffmanTree myTree = encode.generateHuffmanTree();
-			encode.generateCodeMap(myTree);
-			encode.encodeSequence(myFile, args[2]);
+			encode.encode(args[1], args[2]);
 		}
 		else if (args[0].equals("decode")) {
-			System.out.println("decoding");
 			String myFile = args[1];	
 			HuffmanEncoding decode = new HuffmanEncoding();
 			decode.makeDecodeMap(myFile);
@@ -29,6 +23,14 @@ public class HuffmanEncoding {
 		} else {
 			System.out.println("invalid command");
 		}
+	}
+	
+	public void encode(String myFile, String myName) throws IOException {
+		characterCount(myFile);
+		sortFreq();
+		HuffmanTree myTree = generateHuffmanTree();
+		generateCodeMap(myTree);
+		encodeSequence(myFile, myName);
 	}
 	
 	public void makeDecodeMap(String file) {
@@ -277,4 +279,3 @@ public class HuffmanEncoding {
 		}
 	}
 }
-
