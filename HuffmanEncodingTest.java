@@ -12,18 +12,32 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 // for all the binary strings I used this dictionary to look at the letters they corresponded to 
-// convertbinary.com
+// http://www.convertbinary.com/alphabet.php
 
 
 public class HuffmanEncodingTest {
+	
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 	public File tempfile;
-	public File SmallFile;
+
+	@Test
+	public void encode() throws IOException {
+		tempfile = folder.newFile("tempfile");
+		BufferedWriter out = new BufferedWriter(new FileWriter(tempfile));
+		out.write("it was the best of times, it was the worst of times");
+		out.close();
+		HuffmanEncoding test = new HuffmanEncoding();
+		test.encode(folder.getRoot() + "/tempfile", "encoded");
+		
+		HuffmanEncoding smallfiletest = new HuffmanEncoding();
+		
+	}
 	
 	@Test
 	public void characterCount() throws IOException {
 		tempfile = folder.newFile("tempfile");
+		tempfile.deleteOnExit();
 		BufferedWriter out = new BufferedWriter(new FileWriter(tempfile));
 		out.write("happy birthday");
 		out.close();
@@ -52,6 +66,7 @@ public class HuffmanEncodingTest {
 		assertEquals("EOF", (hufflepuff.getFreq().get(10).getString()));
 		
 		tempfile = folder.newFile("tempfile2");
+		tempfile.deleteOnExit();
 		BufferedWriter characters = new BufferedWriter(new FileWriter(tempfile));
 		characters.write(",.:'/!");
 		characters.close();
