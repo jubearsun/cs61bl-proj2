@@ -12,8 +12,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 // for all the binary strings I used this dictionary to look at the letters they corresponded to 
-// http://www.convertbinary.com/alphabet.php
-// I also used convertbinary.com for quick checks
+// convertbinary.com
 
 
 public class HuffmanEncodingTest {
