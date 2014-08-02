@@ -99,8 +99,10 @@ public class FileFreqWordsIterator implements Iterator<String>{
             while (sorted.size() < numOfWords && iterator.hasNext()) {
             	sorted.add((String) iterator.next().getKey());
             }
-            nextWord = wordsRead.get(index);
-            index++;
+            if (wordsRead.size() != 0) {
+            	nextWord = wordsRead.get(index);
+            	index++;
+            }
             nextChar = input.read();
             this.inputFileName = inputFileName;
         } catch (FileNotFoundException e) {
