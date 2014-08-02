@@ -47,6 +47,19 @@ public class HuffmanEncodingTest {
 		assertEquals("01100100", (hufflepuff.getFreq().get(9).getString()));
 		assertEquals(1, (hufflepuff.getFreq().get(9).getWeight()));
 		assertEquals("EOF", (hufflepuff.getFreq().get(10).getString()));
+		
+		tempfile = folder.newFile("tempfile2");
+		BufferedWriter characters = new BufferedWriter(new FileWriter(tempfile));
+		characters.write(",.:'/!");
+		characters.close();
+		HuffmanEncoding gib = new HuffmanEncoding();
+		gib.characterCount(folder.getRoot() + "/tempfile2");
+		assertEquals("00101100", gib.getFreq().get(0).getString());
+		assertEquals("00101110", gib.getFreq().get(1).getString());
+		assertEquals("00111010", gib.getFreq().get(2).getString());
+		assertEquals("00100111", gib.getFreq().get(3).getString());
+		assertEquals("00101111", gib.getFreq().get(4).getString());
+		assertEquals("00100001", gib.getFreq().get(5).getString());
 	}
 
 }
