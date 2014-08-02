@@ -21,18 +21,7 @@ public class HuffmanEncodingTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 	public File tempfile;
 
-	@Test
-	public void encode() throws IOException {
-		tempfile = folder.newFile("tempfile");
-		BufferedWriter out = new BufferedWriter(new FileWriter(tempfile));
-		out.write("it was the best of times, it was the worst of times");
-		out.close();
-		HuffmanEncoding test = new HuffmanEncoding();
-		test.encode(folder.getRoot() + "/tempfile", "encoded");
-		
-		HuffmanEncoding smallfiletest = new HuffmanEncoding();
-		
-	}
+	
 	
 	@Test
 	public void characterCount() throws IOException {
