@@ -21,7 +21,7 @@ public class FileFreqWordsIterator implements Iterator<String>{
 
     private String inputFileName;
     private int nextChar;
-    private HashMap<String, Integer> freqWords = new HashMap<String, Integer>(); //store words and their frequencies in a hashmap
+    private HashMap<String, Integer> freqWords = new HashMap<String, Integer>();
     private Set<Map.Entry<String, Integer>> entrySet;
     private TreeSet<Entry> freqWordsSorted;
     private int numOfWords;
@@ -34,13 +34,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
     
     public static void main(String[] args) {
     	FileFreqWordsIterator freqwords = new FileFreqWordsIterator(args[0], Integer.parseInt(args[1]));
-
-    	//for (String en : freqwords.wordsRead) {
-    		//System.out.println("OK " + en);
-    	//}
-    	
-    	
-    	
     	
     	while (freqwords.hasNext()) {
     		System.out.println(freqwords.next());
@@ -80,9 +73,7 @@ public class FileFreqWordsIterator implements Iterator<String>{
     	
         try {
             input = new FileInputStream(inputFileName);
-            
-            //New stuff starts here
-            
+           
             
             reader = new BufferedReader(new InputStreamReader(new FileInputStream(inputFileName)));
             String text;
@@ -112,12 +103,8 @@ public class FileFreqWordsIterator implements Iterator<String>{
             while (sorted.size() < numOfWords && iterator.hasNext()) {
             	sorted.add((String) iterator.next().getKey());
             }
-            
-            
             nextWord = wordsRead.get(index);
             index++;
-            
-            
             nextChar = input.read();
             this.inputFileName = inputFileName;
         } catch (FileNotFoundException e) {
@@ -134,7 +121,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
 	@Override
 	public boolean hasNext() {
         return (nextChar != -1);
-
 	}
 
 	@Override
@@ -154,8 +140,10 @@ public class FileFreqWordsIterator implements Iterator<String>{
                             "IOException while reading in from file %s\n",
                             this.inputFileName);
                 }
-	            nextWord = wordsRead.get(index);
-            	index++;
+	            if (index != wordsRead.size()) {
+	            	nextWord = wordsRead.get(index);
+	            	index++; 
+	            	}
 	            return toRtn;
         	} else if (sorted.contains(nextWord)) {
             	for (int i = 0; i < nextWord.length(); i++) {
