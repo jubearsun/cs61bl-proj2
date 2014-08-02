@@ -38,10 +38,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
     	while (freqwords.hasNext()) {
     		System.out.println(freqwords.next());
     	}
-    	
-
-
-
 
     }
     
@@ -93,8 +89,8 @@ public class FileFreqWordsIterator implements Iterator<String>{
             }
             reader.close();
                
-            entrySet = freqWords.entrySet(); // this is the unsorted set
-            freqWordsSorted = new TreeSet<Entry>(new myComp()); // this is the empty sorted list
+            entrySet = freqWords.entrySet(); 
+            freqWordsSorted = new TreeSet<Entry>(new myComp()); 
             
             for (Entry pair : entrySet) {
             	freqWordsSorted.add((Entry) pair);
