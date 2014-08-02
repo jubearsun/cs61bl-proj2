@@ -30,7 +30,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
     
     private String nextWord;
     private ArrayList<String> wordsRead = new ArrayList<String>();
-    private int internalIndex = 0;
 
     
     public static void main(String[] args) {
