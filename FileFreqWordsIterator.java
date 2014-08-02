@@ -91,10 +91,12 @@ public class FileFreqWordsIterator implements Iterator<String>{
             	String[] words = text.split("\n|\\s+");
             	for (String word : words) {
             		wordsRead.add(word);
-            		if (freqWords.containsKey(word)) {
-            			freqWords.put(word, freqWords.get(word) + 1);
-            		} else {
-            			freqWords.put(word, 1);
+            		if (word.length() >= 2) {
+	            		if (freqWords.containsKey(word)) {
+	            			freqWords.put(word, freqWords.get(word) + 1);
+	            		} else {
+	            			freqWords.put(word, 1);
+	            		}
             		}
             	}
 
@@ -137,28 +139,14 @@ public class FileFreqWordsIterator implements Iterator<String>{
 	}
 
 	@Override
-	public String next() {
-		//idea is to first iterate through the word list sorted by frequency and then iterate through the characters. I would just 
-		//surround this in a big if-else statement (have some sort of index and if that index is less than the size of the sorted
-		//word list then set toRtn to the i-th element of that sorted word list otherwise do everything below
-
-		//but I'm not sure if that's what they're asking for
-		//haven't constructed sorted list yet
-		
-		
-
-		
-		
+	public String next() {		
 		if (this.nextChar == -1) {
             return "";
         } else {
         	if (this.nextChar == 32 || this.nextChar == 10) {
         		Byte b = (byte) this.nextChar;
 	            String toRtn = String.format("%8s",
-	                    Integer.toBinaryString(b & 0xFF)).replace(' ', '0'); //need to do this for each word too
-	            int c = Integer.parseInt(toRtn, 2);
-	            toRtn = new Character((char) c).toString();
-	            
+	                    Integer.toBinaryString(b & 0xFF)).replace(' ', '0');	            
 	            try {
                     this.nextChar = this.input.read();
                     
@@ -170,12 +158,10 @@ public class FileFreqWordsIterator implements Iterator<String>{
 	            nextWord = wordsRead.get(index);
             	index++;
 	            return toRtn;
-        	}
-            if (sorted.contains(nextWord)) {
+        	} else if (sorted.contains(nextWord)) {
             	for (int i = 0; i < nextWord.length(); i++) {
                     try {
                         this.nextChar = this.input.read();
-                        
                     } catch (IOException e) {
                         System.err.printf(
                                 "IOException while reading in from file %s\n",
@@ -183,36 +169,26 @@ public class FileFreqWordsIterator implements Iterator<String>{
                     }
             	}
             	String toRtn = nextWord;
-            	
-            	return toRtn;
+            	byte[] bb = toRtn.getBytes();
+            	StringBuilder binary = new StringBuilder();
+            	for (Byte b : bb) {
+            		binary.append(String.format("%8s",
+    		                Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+            	}
+            	return binary.toString();
             	
             } else {
-            	String toRtn = null;
-            	if (internalIndex == nextWord.length()) {
-            		internalIndex = 0;
-            	}
-            	if (internalIndex < nextWord.length()) {
-		            Byte b = (byte) this.nextChar;
-		            toRtn = String.format("%8s",
-		                    Integer.toBinaryString(b & 0xFF)).replace(' ', '0'); //need to do this for each word too
-		            int c = Integer.parseInt(toRtn, 2);
-		            toRtn = new Character((char) c).toString();
-		            try {
-		                this.nextChar = this.input.read();
-		            } catch (IOException e) {
-		                System.err.printf(
-		                        "IOException while reading in from file %s\n",
-		                        this.inputFileName);
-		            }
-		            internalIndex++;
-		            
-		            
-		            
-		            return toRtn;
-
-		        } 
-
-				return toRtn ;
+		        Byte b = (byte) this.nextChar;
+		        String toRtn = String.format("%8s",
+		                Integer.toBinaryString(b & 0xFF)).replace(' ', '0');
+		        try {
+		        	this.nextChar = this.input.read();
+	            } catch (IOException e) {
+		            System.err.printf(
+		                    "IOException while reading in from file %s\n",
+		                    this.inputFileName);
+		        }
+				return toRtn;
             }
         }
 	}
