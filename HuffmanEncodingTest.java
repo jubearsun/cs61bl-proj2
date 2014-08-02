@@ -16,6 +16,10 @@ import org.junit.rules.TemporaryFolder;
 
 
 public class HuffmanEncodingTest {
+	@Rule
+	public TemporaryFolder folder = new TemporaryFolder();
+	public File tempfile;
+	public File SmallFile;
 	
 	@Test
 	public void characterCount() throws IOException {
