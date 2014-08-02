@@ -25,6 +25,10 @@ public class HuffmanEncoding {
 		}
 	}
 	
+	public ArrayList<Frequency> getFreq() {
+		return myFreq;
+	}
+
 	public void encode(String myFile, String myName) throws IOException {
 		characterCount(myFile);
 		sortFreq();
@@ -32,7 +36,7 @@ public class HuffmanEncoding {
 		generateCodeMap(myTree);
 		encodeSequence(myFile, myName);
 	}
-	
+
 	public void makeDecodeMap(String file) {
 		ArrayList<String> keysValues = new ArrayList<String>();
 		String current = new String();
@@ -58,7 +62,7 @@ public class HuffmanEncoding {
 			myDecodeMap.put(keysValues.get(i+1), keysValues.get(i));
 		}
 	}
-	
+
 	public void decode(String input, String output) {
 		FileOutputHelper myOutput = new FileOutputHelper();
 		char prev = 0;
@@ -106,15 +110,15 @@ public class HuffmanEncoding {
 		}
 		myFreq.add(new Frequency(1, "EOF"));
 	}
-	
+
 	public void sortFreq() { 
 		Collections.sort(myFreq);
 	}
-	
+
 	public HuffmanTree generateHuffmanTree() {
 		return new HuffmanTree(myFreq);
 	}
-	
+
 	public void generateCodeMap(HuffmanTree myTree) {
 		myTreeMap = new TreeMap<String, StringBuilder>();
 		if (myTree.myRoot == null) {
@@ -124,7 +128,7 @@ public class HuffmanEncoding {
 			myTree.codeMapHelper(myTree.myRoot, myString1, myTree.myRoot);
 			}
 		}
-		
+
 	public void encodeSequence(String sequence, String name) throws IOException {
 		FileCharIterator sequenceIter = new FileCharIterator(sequence);
 		StringBuilder encoded = new StringBuilder();
@@ -175,28 +179,28 @@ public class HuffmanEncoding {
 		public int compareTo(Frequency o) { 
 			return (myWeight - o.myWeight);
 		}
-		
+
 		public void setWeight(int weight) {
 			myWeight = weight;
 		}
-		
+
 		public int getWeight() {
 			return myWeight;
 		}
-		
+
 		public String getString() {
 			return myString;
 		}
 	}
 
 	public class HuffmanTree {
-		
+
 		private HuffmanNode myRoot;
-		
+
 		public HuffmanTree() {
 			myRoot = null;
 		}
-		
+
 		public HuffmanTree(HuffmanNode node) {
 			myRoot = node;
 		}
@@ -218,7 +222,7 @@ public class HuffmanEncoding {
 				}
 			} 
 		}
-		
+
 		public HuffmanTree(ArrayList<Frequency> freq){
 			ArrayList<HuffmanNode> treeList = new ArrayList<HuffmanNode>();
 			for (Frequency f: freq) {
@@ -240,7 +244,7 @@ public class HuffmanEncoding {
 				myRoot = treeList.get(0);
 			}
 		}
-		
+
 		public class HuffmanNode implements Comparable<HuffmanNode> { 
 			private int myWeight;
 			private String myElement;
@@ -261,15 +265,15 @@ public class HuffmanEncoding {
 				myLeft = left;
 				myRight = right;
 			}
-			
+
 			public String toString() {
 				return ("(" + myElement + ", " + myWeight + ")" );
 			}
-			
+
 			public boolean hasElement() {
 				return !(myElement == null);
 			}
-			
+
 			public int compareTo(HuffmanNode arg0) {
  				if (myWeight - arg0.myWeight == 0) {
 					return -1;
