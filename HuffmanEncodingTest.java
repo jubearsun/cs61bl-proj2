@@ -31,7 +31,7 @@ public class HuffmanEncodingTest {
 		out.write("happy birthday");
 		out.close();
 		HuffmanEncoding hufflepuff = new HuffmanEncoding();
-		hufflepuff.characterCount(folder.getRoot() + "/tempfile");
+		hufflepuff.characterCount(folder.getRoot() + "/tempfile", 0);
 		assertEquals("01101000", (hufflepuff.getFreq().get(0).getString()));
 		assertEquals(2, (hufflepuff.getFreq().get(0).getWeight()));
 		assertEquals("01100001", (hufflepuff.getFreq().get(1).getString()));
@@ -60,7 +60,7 @@ public class HuffmanEncodingTest {
 		characters.write(",.:'/!");
 		characters.close();
 		HuffmanEncoding gib = new HuffmanEncoding();
-		gib.characterCount(folder.getRoot() + "/tempfile2");
+		gib.characterCount(folder.getRoot() + "/tempfile2", 0);
 		assertEquals("00101100", gib.getFreq().get(0).getString());
 		assertEquals("00101110", gib.getFreq().get(1).getString());
 		assertEquals("00111010", gib.getFreq().get(2).getString());
