@@ -9,6 +9,10 @@ Huu Pham cs61bl-bf
 HuffmanEncodingTest.java
 1. characterCount test tested that given a file, the frequencies of each binary string representation of a character in the file had the correct weight, or frequency.  Since we had added all the characters and their weights to an ArrayList of frequencies we simply checked that each index of the ArrayList contained the correct frequency for the file.
 
+testEncodeAndDecode()
+It's difficult to test if two compressed files are equal because differing implementations of encode can result in different file structures. In order to test encode, we encoded two of the sample files and then decoded them, verifying that both worked by iterating over the decoded files to make sure they were the same as the originals. 
+
+
 FileFreqWordsIteratorTest.java
 1. Our constructor test tests the size of the sorted, an ArrayList we wrote in FileFreqWordsIterator that contains the n most frequent words that appear in the file.  So if n = 4, the size of sorted should also be 4.  We also tested that each index of the ArrayList contained a String object that corresponded to the n most frequent words.
 2. Our hasnext test tests if, while iterating with FileFreqWordsIterator through a file, there is something still to be returned.  We tested in the middle of iterating that hasnext is true and at the end that hasnext is false.  
