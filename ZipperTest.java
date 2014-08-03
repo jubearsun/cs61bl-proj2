@@ -51,7 +51,6 @@ public class ZipperTest {
 	@Test
 	public void testFindTOCLength() throws IOException {
 		Zipper zip = new Zipper();
-		HuffmanEncoding huff = new HuffmanEncoding();
 		assertTrue(zip.findTOCLength("sample_files/example_dir.zipper") == 173);
 		assertTrue(zip.findTOCLength("sample_files/kaleidoscopezip.zipper") == 20);
 	}
