@@ -18,8 +18,7 @@ public class HuffmanEncoding {
 		else if (args[0].equals("decode")) {
 			String myFile = args[1];	
 			HuffmanEncoding decode = new HuffmanEncoding();
-			decode.makeDecodeMap(myFile);
-			decode.decode(myFile, args[2]);
+			decode.decode(myFile, args[2], 0);
 		}
 		else if (args[0].equals("encode2")) {
 			HuffmanEncoding encode2 = new HuffmanEncoding();
@@ -41,19 +40,22 @@ public class HuffmanEncoding {
 		encodeSequence(myFile, myName, numberOfWords);
 	}
 
-	public void makeDecodeMap(String file) {
+	public void decode(String input, String output, int index) {
 		ArrayList<String> keysValues = new ArrayList<String>();
 		String current = new String();
 		char prev = 0;
-		FileCharIterator decode = new FileCharIterator(file);
+		FileCharIterator decode = new FileCharIterator(input);
+		while (index != 0) {
+			decode.next();
+			index--;
+		}
 		while (decode.hasNext()) {
 			char a = (char) Integer.parseInt(decode.next(), 2);
+			if (a == ('\n') && prev == ('\n')) {
+				break;
+			}
 			if ( a != (',' ) && a != ('\n')) {
 				current += a;
-			}
-			if (a == ('\n') && prev == ('\n')){
-				System.out.println(current);
-				break;
 			}
 			if (a == (',') || a == ('\n')) {
 				keysValues.add(current);
@@ -65,37 +67,26 @@ public class HuffmanEncoding {
 		for (int i = 0; i < keysValues.size(); i += 2) {
 			myDecodeMap.put(keysValues.get(i+1), keysValues.get(i));
 		}
-	}
-
-	public void decode(String input, String output) {
 		FileOutputHelper myOutput = new FileOutputHelper();
-		char prev = 0;
-		FileCharIterator decode = new FileCharIterator(input);
-		while (decode.hasNext()) {
-			char a = (char) Integer.parseInt(decode.next(), 2);
-			if (a == ('\n') && prev == ('\n')){
-				break;
-			}
-			prev = a;
-		}
-		String current = "";
-		int i = 0;
-		int distance = 1;
 		while (decode.hasNext()) {
 			current += decode.next();
-		}
-		while (distance <= current.length()) {
-			if (myDecodeMap.containsKey(current.substring(i, distance))) {
-				if (myDecodeMap.get(current.substring(i, distance)).equals("EOF")) {
-					break;
+			int i = 0;
+			int distance = 1;
+			while (distance <= current.length()) {
+				if (myDecodeMap.containsKey(current.substring(i, distance))) {
+					if (myDecodeMap.get(current.substring(i, distance)).equals("EOF")) {
+						break;
+					}
+					FileOutputHelper.writeBinStrToFile(myDecodeMap.get(current.substring(i, distance)), output);
+					current = current.substring(distance);
+					i = 0;
+					distance = 1;
+				} else {
+					distance++;
 				}
-				FileOutputHelper.writeBinStrToFile(myDecodeMap.get(current.substring(i, distance)), output);
-				i = distance;
-				distance = distance + 1;
-			} else {
-			distance++;
 			}
 		}
+		decode.closeStream();
 	}
 
 	public void characterCount(String input, int numberOfWords) { 
@@ -113,6 +104,7 @@ public class HuffmanEncoding {
 			myFreq.add(new Frequency(1, current));	
 		}
 		myFreq.add(new Frequency(1, "EOF"));
+		inputIter.closeStream();
 	}
 
 	public void sortFreq() { 
@@ -152,7 +144,7 @@ public class HuffmanEncoding {
 		b.write(codemapString());
 		b.close();
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), name);
-
+		sequenceIter.closeStream();
 	}
 
 	public String codemapString() {
