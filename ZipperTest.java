@@ -180,5 +180,4 @@ public class ZipperTest {
 		myDecompress.delete();
 		myCompress.delete();
 	}
-	
 }
