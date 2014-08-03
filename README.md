@@ -1,5 +1,23 @@
 Julia Sun cs61bl-av Michael Zhang cs61bl-at Ben Marimon cs61bl-be Huu Pham cs61bl-bf
 
+CONTRIBUTIONS
+
+We split things up between Julia + Michael and Ben + Huu.
+
+Ben + Huu: 
+1. Set up the Frequency class, characterCount and codeMap
+2. Decode
+3. Part 3
+4. Tests for part 3 
+5. tests for encode/decode, runtimes
+
+Julia + Michael:
+1. Set up HuffmanTree/Node
+2. Encode
+3. Part 2
+4. Tests for part 2
+5. tests for helper methods for HuffmanEncoding
+
 HuffmanEncodingTest.java 1. characterCount test tested that given a file, the frequencies of each binary string representation of a character in the file had the correct weight, or frequency. Since we had added all the characters and their weights to an ArrayList of frequencies we simply checked that each index of the ArrayList contained the correct frequency for the file. 2. generateCodeMap test tested that our codemaps were correct, by manually adding frequencies to an ArrayList that we use to construct a HuffmanTree. We then checked that the Huffman tree's structure matched the code mapping by manually creating the tree ourselves and tracking the left and right values of the Huffman tree and ensuring that each entry belongs where it is. 3. HuffmanTreeConstructor test tested the constructor for the HuffmanTree, one with different frequencies and one for different words that had the same frequency.
 
 testEncodeAndDecode() It's difficult to test if two compressed files are equal because differing implementations of encode can result in different file structures. In order to test encode, we encoded two of the sample files and then decoded them, verifying that both worked by iterating over the decoded files to make sure they were the same as the originals.
