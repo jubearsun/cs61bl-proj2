@@ -1,12 +1,9 @@
 import static org.junit.Assert.*;
-
 import java.io.*;
-import java.util.ArrayList;
-
 import org.junit.Test;
 
 public class ZipperTest {
-	
+
 	@Test
 	public void testMakeDirectory() {
 		Zipper zip = new Zipper();
@@ -34,6 +31,7 @@ public class ZipperTest {
 	public void testDeleteExistingFile() {
 		Zipper zip = new Zipper();
 		File file = new File("file");
+		file.mkdir();
 		assertTrue(file.exists() == true);
 		zip.deleteExistingFile(file);
 		assertTrue(file.exists() == false);
@@ -57,7 +55,7 @@ public class ZipperTest {
 		assertTrue(zip.findTOCLength("sample_files/example_dir.zipper") == 173);
 		assertTrue(zip.findTOCLength("sample_files/kaleidoscopezip.zipper") == 20);
 	}
-	
+
 	@Test
 	public void testSingleFile() throws IOException {
 		Zipper myZip = new Zipper();
@@ -154,7 +152,6 @@ public class ZipperTest {
 		assertTrue(!myDecompressed.hasNext());
 		myDecompressed.closeStream();
 		myOriginal.closeStream();
-		
 		FileCharIterator myOriginal2 = new FileCharIterator("sample_files/Kaleidoscope.txt");
 		FileCharIterator myDecompressed2 = new FileCharIterator("decompressed/example_dir/Kaleidoscope.txt");
 		while (myOriginal2.hasNext()) {
