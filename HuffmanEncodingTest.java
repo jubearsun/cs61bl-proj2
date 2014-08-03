@@ -1,12 +1,6 @@
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
+import java.io.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -21,8 +15,6 @@ public class HuffmanEncodingTest {
 	public TemporaryFolder folder = new TemporaryFolder();
 	public File tempfile;
 
-	
-	
 	@Test
 	public void characterCount() throws IOException {
 		tempfile = folder.newFile("tempfile");
@@ -68,5 +60,43 @@ public class HuffmanEncodingTest {
 		assertEquals("00101111", gib.getFreq().get(4).getString());
 		assertEquals("00100001", gib.getFreq().get(5).getString());
 	}
-
+	
+	@Test
+	public void testEncodeAndDecode1() throws IOException {
+		HuffmanEncoding huff = new HuffmanEncoding();		
+		File lastQuestionEncoded = new File("sample_files/lastquestionEncoded.huffman");
+		huff.encode("sample_files/lastquestion.txt", "sample_files/lastquestionEncoded.txt.huffman", 0);
+		File lastQuestionDecoded = new File("sample_files/lastquestionDecoded.txt");
+		huff.decode("sample_files/lastquestionEncoded.txt.huffman", "sample_files/lastquestionDecoded.txt", 0);
+		FileCharIterator decodedLQFile = new FileCharIterator("sample_files/lastquestion.txt");
+		FileCharIterator checkLQdecoded = new FileCharIterator("sample_files/lastquestionDecoded.txt");
+		while (checkLQdecoded.hasNext()) {
+			assertTrue(checkLQdecoded.next().equals(decodedLQFile.next()));
+		}
+		assertTrue(!decodedLQFile.hasNext());
+		decodedLQFile.closeStream();
+		checkLQdecoded.closeStream();
+		lastQuestionEncoded.delete();
+		lastQuestionDecoded.delete();
+	}
+	
+	@Test
+	public void testEncodeAndDecode2() throws IOException {
+		HuffmanEncoding huff = new HuffmanEncoding();		
+		File KaleidoscopeEncoded = new File("sample_files/KaleidoscopeEncoded.huffman");
+		huff.encode("sample_files/Kaleidoscope.txt", "sample_files/KaleidoscopeEncoded.txt.huffman", 0);
+		File KaleidoscopeDecoded = new File("sample_files/KaleidoscopeDecoded.txt");
+		huff.decode("sample_files/KaleidoscopeEncoded.txt.huffman", "sample_files/KaleidoscopeDecoded.txt", 0);
+		FileCharIterator decodedLQFile = new FileCharIterator("sample_files/KaleidoscopeDecoded.txt");
+		FileCharIterator checkLQdecoded = new FileCharIterator("sample_files/KaleidoscopeDecoded.txt");
+		while (checkLQdecoded.hasNext()) {
+			assertTrue(checkLQdecoded.next().equals(decodedLQFile.next()));
+		}
+		assertTrue(!decodedLQFile.hasNext());
+		decodedLQFile.closeStream();
+		checkLQdecoded.closeStream();
+		KaleidoscopeEncoded.delete();
+		KaleidoscopeDecoded.delete();
+	}
+	
 }
