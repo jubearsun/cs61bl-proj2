@@ -9,7 +9,6 @@ public class Zipper {
 	private TreeMap<String, String> myLoc;
 	
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		if (args[0].equals("zipper")) {
 			Zipper zipper = new Zipper();
 			zipper.zip(new File(args[1]), args[2], new File(args[1]).getName());
