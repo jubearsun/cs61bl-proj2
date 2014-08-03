@@ -28,10 +28,11 @@ public class FileFreqWordsIteratorTest {
 		FileFreqWordsIterator iterator = new FileFreqWordsIterator(folder.getRoot() + "/temp", 4);
 		
 		assertEquals(iterator.getSorted().size(), 4);
-		assertEquals(iterator.getSorted().get(0), "it");
-		assertEquals(iterator.getSorted().get(1), "was");
-		assertEquals(iterator.getSorted().get(2), "of"); // order doesn't matter here as long as it's in order in the next method
-		assertEquals(iterator.getSorted().get(3), "the");
+		assertTrue(iterator.getSorted().contains("it"));
+		assertTrue(iterator.getSorted().contains("was"));
+		assertTrue(iterator.getSorted().contains("of"));
+		assertTrue(iterator.getSorted().contains("the"));
+		
 		
 		myFile = folder.newFile("booboo");
 		myFile.deleteOnExit();
