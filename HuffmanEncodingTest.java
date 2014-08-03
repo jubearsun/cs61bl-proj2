@@ -1,6 +1,13 @@
 import static org.junit.Assert.*;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -14,6 +21,85 @@ public class HuffmanEncodingTest {
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 	public File tempfile;
+	
+	@Test
+	public void generateCodeMap() {
+		HuffmanEncoding h = new HuffmanEncoding();
+		HuffmanEncoding.Frequency f1 = h.new Frequency(1, "a");
+		HuffmanEncoding.Frequency f2 = h.new Frequency(2, "b");
+		HuffmanEncoding.Frequency f3 = h.new Frequency(3, "c");
+		ArrayList<HuffmanEncoding.Frequency> freq = new ArrayList<HuffmanEncoding.Frequency>();
+		freq.add(f1);
+		freq.add(f2);
+		freq.add(f3);
+		HuffmanEncoding.HuffmanTree tree = h.new HuffmanTree(freq);
+		h.generateCodeMap(tree);
+		Iterator<Entry<String, StringBuilder>> i = h.getTreeMap().entrySet().iterator();
+		assertEquals(i.next().getKey(), tree.getRoot().getLeft().getLeft().getElement());
+		assertEquals(i.next().getKey(), tree.getRoot().getLeft().getRight().getElement());
+		assertEquals(i.next().getKey(), tree.getRoot().getRight().getElement());
+		
+		
+		
+		HuffmanEncoding h2 = new HuffmanEncoding();
+
+		HuffmanEncoding huffypuffy = new HuffmanEncoding();
+		HuffmanEncoding.Frequency f = huffypuffy.new Frequency(1, "one");
+		HuffmanEncoding.Frequency ff = huffypuffy.new Frequency(1, "oone");
+		HuffmanEncoding.Frequency fff = huffypuffy.new Frequency(2, "two");
+		HuffmanEncoding.Frequency ffff = huffypuffy.new Frequency(3, "three");
+		ArrayList<HuffmanEncoding.Frequency> freq2 = new ArrayList<HuffmanEncoding.Frequency>(); 
+		freq2.add(f);
+		freq2.add(ff);
+		freq2.add(fff);
+		freq2.add(ffff);
+		HuffmanEncoding.HuffmanTree tree2 = h2.new HuffmanTree(freq2);
+		h2.generateCodeMap(tree2);
+		Iterator<Entry<String, StringBuilder>> i2 = h2.getTreeMap().entrySet().iterator();
+		System.out.println(h2.getTreeMap().entrySet());
+		assertEquals(i2.next().getKey(), tree2.getRoot().getRight().getLeft().getLeft().getElement());
+		assertEquals(i2.next().getKey(), tree2.getRoot().getRight().getLeft().getRight().getElement());
+		assertEquals(i2.next().getKey(), tree2.getRoot().getLeft().getElement());
+		assertEquals(i2.next().getKey(), tree2.getRoot().getRight().getRight().getElement());
+
+
+	}
+	
+	@Test
+	public void HuffmanTreeConstructor() {
+		HuffmanEncoding h = new HuffmanEncoding();
+		HuffmanEncoding.Frequency f1 = h.new Frequency(1, "a");
+		HuffmanEncoding.Frequency f2 = h.new Frequency(2, "b");
+		HuffmanEncoding.Frequency f3 = h.new Frequency(3, "c");
+		ArrayList<HuffmanEncoding.Frequency> freq = new ArrayList<HuffmanEncoding.Frequency>();
+		freq.add(f1);
+		freq.add(f2);
+		freq.add(f3);
+		HuffmanEncoding.HuffmanTree tree = h.new HuffmanTree(freq);
+		assertEquals(tree.getRoot().toString(), "(null, 6)");
+		assertEquals(tree.getRoot().getLeft().toString(), "(null, 3)");
+		assertEquals(tree.getRoot().getLeft().getLeft().toString(), "(a, 1)");
+		assertEquals(tree.getRoot().getLeft().getRight().toString(), "(b, 2)");
+		assertEquals(tree.getRoot().getRight().toString(), "(c, 3)");
+		
+		HuffmanEncoding huffypuffy = new HuffmanEncoding();
+		HuffmanEncoding.Frequency f = huffypuffy.new Frequency(1, "one");
+		HuffmanEncoding.Frequency ff = huffypuffy.new Frequency(1, "oone");
+		HuffmanEncoding.Frequency fff = huffypuffy.new Frequency(2, "two");
+		HuffmanEncoding.Frequency ffff = huffypuffy.new Frequency(3, "three");
+		ArrayList<HuffmanEncoding.Frequency> freq2 = new ArrayList<HuffmanEncoding.Frequency>(); 
+		freq2.add(f);
+		freq2.add(ff);
+		freq2.add(fff);
+		freq2.add(ffff);
+		HuffmanEncoding.HuffmanTree tree2 = h.new HuffmanTree(freq2);
+
+		assertEquals(tree2.getRoot().toString(), "(null, 7)");
+		assertEquals(tree2.getRoot().getLeft().toString(), "(three, 3)");
+		assertEquals(tree2.getRoot().getRight().toString(), "(null, 4)");
+		assertEquals(tree2.getRoot().getRight().getLeft().toString(), "(null, 2)");
+		assertEquals(tree2.getRoot().getRight().getRight().toString(), "(two, 2)");
+	}
 
 	@Test
 	public void characterCount() throws IOException {
