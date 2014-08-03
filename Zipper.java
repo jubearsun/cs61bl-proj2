@@ -147,7 +147,7 @@ public class Zipper {
 		int index = 0;
 		File tempFile = new File("temporary");
 		tempFile.deleteOnExit();
-		for (File myFile: myFiles) {		
+		for (File myFile: myFiles) {
 			File temp = myFile;
 			StringBuilder myName = new StringBuilder(temp.getName());
 			while (!temp.getName().equals(myStart)) {
@@ -157,7 +157,7 @@ public class Zipper {
 			}
 			if (myFile.isFile()) {
 				HuffmanEncoding encode = new HuffmanEncoding();
-				encode.encode(myFile.getPath(), "temporary");
+				encode.encode(myFile.getPath(), "temporary", 0);
 				myLoc.put(myName.toString(), "" + index);	
 				FileOutputHelper.writeBinStrToFile("00001010", "temporary");
 				index = (int) tempFile.length();
