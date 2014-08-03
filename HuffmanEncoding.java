@@ -7,7 +7,7 @@ import java.util.TreeMap;
 public class HuffmanEncoding {
 
 	private ArrayList<Frequency> myFreq;
-	private TreeMap<String, StringBuilder> myTreeMap;
+	private TreeMap<String, StringBuilder> myEncodeMap;
 	private TreeMap<String, String> myDecodeMap;
 
 	public static void main(String[] args) throws IOException {
@@ -28,8 +28,14 @@ public class HuffmanEncoding {
 		}
 	}
 	
+	public HuffmanEncoding() {
+		myFreq = new ArrayList<Frequency>();
+		myEncodeMap = new TreeMap<String, StringBuilder>();
+		myDecodeMap = new TreeMap<String, String>();
+	}
+	
 	public TreeMap<String, StringBuilder> getTreeMap() {
-		return myTreeMap;
+		return myEncodeMap;
 	}
 	
 	public ArrayList<Frequency> getFreq() {
@@ -67,7 +73,6 @@ public class HuffmanEncoding {
 			}
 			prev = a;
 		}
-		myDecodeMap = new TreeMap<String, String>();
 		for (int i = 0; i < keysValues.size(); i += 2) {
 			myDecodeMap.put(keysValues.get(i+1), keysValues.get(i));
 		}
@@ -94,7 +99,6 @@ public class HuffmanEncoding {
 
 	public void characterCount(String input, int numberOfWords) { 
 		FileFreqWordsIterator inputIter = new FileFreqWordsIterator(input, numberOfWords);
-		myFreq = new ArrayList<Frequency>();
 		outerloop:
 		while (inputIter.hasNext()) {
 			String current = inputIter.next();
@@ -118,7 +122,6 @@ public class HuffmanEncoding {
 	}
 
 	public void generateCodeMap(HuffmanTree myTree) {
-		myTreeMap = new TreeMap<String, StringBuilder>();
 		if (myTree.myRoot == null) {
 			return;
 		} else {
@@ -132,10 +135,10 @@ public class HuffmanEncoding {
 		StringBuilder encoded = new StringBuilder();
 		while (sequenceIter.hasNext()) {
 			String binString = sequenceIter.next();
-			String code = myTreeMap.get(binString).toString();
+			String code = myEncodeMap.get(binString).toString();
 			encoded.append(code);
 		}
-		encoded.append(myTreeMap.get("EOF"));
+		encoded.append(myEncodeMap.get("EOF"));
 		if (encoded.length() % 8 != 0) {
 			while ((encoded.length() % 8) != 0) {
 				encoded.append(0);
@@ -150,7 +153,7 @@ public class HuffmanEncoding {
 
 	public String codemapString() {
 		StringBuilder codemap = new StringBuilder();
-		for (Map.Entry<String, StringBuilder> entry : myTreeMap.entrySet()) {
+		for (Map.Entry<String, StringBuilder> entry : myEncodeMap.entrySet()) {
 			String key = entry.getKey();
 			StringBuilder value = entry.getValue();
 			codemap.append(key + "," + value + "\n");
@@ -200,7 +203,7 @@ public class HuffmanEncoding {
 
 		public void codeMapHelper(HuffmanNode myNode, StringBuilder myString, HuffmanNode start) {
 			if (myNode.hasElement() && !myNode.found) {
-				myTreeMap.put(myNode.myElement, myString);
+				myEncodeMap.put(myNode.myElement, myString);
 				myNode.found = true;
 				StringBuilder newString = new StringBuilder("");
 				codeMapHelper(start, newString, start);
