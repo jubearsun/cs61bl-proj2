@@ -13,13 +13,17 @@ public class HuffmanEncoding {
 	public static void main(String[] args) throws IOException {
 		if (args[0].equals("encode")) {
 			HuffmanEncoding encode = new HuffmanEncoding();
-			encode.encode(args[1], args[2]);
+			encode.encode(args[1], args[2], 0);
 		}
 		else if (args[0].equals("decode")) {
 			String myFile = args[1];	
 			HuffmanEncoding decode = new HuffmanEncoding();
 			decode.makeDecodeMap(myFile);
 			decode.decode(myFile, args[2]);
+		}
+		else if (args[0].equals("encode2")) {
+			HuffmanEncoding encode2 = new HuffmanEncoding();
+			encode2.encode(args[1], args[2], Integer.parseInt(args[3]));
 		} else {
 			System.out.println("invalid command");
 		}
@@ -29,12 +33,12 @@ public class HuffmanEncoding {
 		return myFreq;
 	}
 
-	public void encode(String myFile, String myName) throws IOException {
-		characterCount(myFile);
+	public void encode(String myFile, String myName, int numberOfWords) throws IOException {
+		characterCount(myFile, numberOfWords);
 		sortFreq();
 		HuffmanTree myTree = generateHuffmanTree();
 		generateCodeMap(myTree);
-		encodeSequence(myFile, myName);
+		encodeSequence(myFile, myName, numberOfWords);
 	}
 
 	public void makeDecodeMap(String file) {
@@ -94,8 +98,8 @@ public class HuffmanEncoding {
 		}
 	}
 
-	public void characterCount(String input) { 
-		FileCharIterator inputIter = new FileCharIterator(input);
+	public void characterCount(String input, int numberOfWords) { 
+		FileFreqWordsIterator inputIter = new FileFreqWordsIterator(input, numberOfWords);
 		myFreq = new ArrayList<Frequency>();
 		outerloop:
 		while (inputIter.hasNext()) {
@@ -129,8 +133,8 @@ public class HuffmanEncoding {
 			}
 		}
 
-	public void encodeSequence(String sequence, String name) throws IOException {
-		FileCharIterator sequenceIter = new FileCharIterator(sequence);
+	public void encodeSequence(String sequence, String name, int numberOfWords) throws IOException {
+		FileFreqWordsIterator sequenceIter = new FileFreqWordsIterator(sequence, numberOfWords);
 		StringBuilder encoded = new StringBuilder();
 		while (sequenceIter.hasNext()) {
 			String binString = sequenceIter.next();
@@ -143,14 +147,10 @@ public class HuffmanEncoding {
 				encoded.append(0);
 			}
 		}
-
-		FileWriter f = new FileWriter(name, true);
+		FileWriter f = new FileWriter(name);
 		BufferedWriter b = new BufferedWriter(f);
 		b.write(codemapString());
 		b.close();
-//		the code above adds in a string representation of the code map before the encoded text
-//		can be moved later
-
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), name);
 
 	}
