@@ -26,7 +26,7 @@ testFindTOCLength():
 3.	this test to make sure that findTOCLength returns the correct length of the table of contents. We ran the methods on several zipper files, and manually counting the characters of the table of contents(including newline characters) we then check that the function returns a number that is a correct representation of how many characters are in the table of contents.
 
 4.	
-estSingleFile()
+testSingleFile()
 tests that the zippercan compress and then decompress a single file with no other directories involved except for the output one
 
 5.
