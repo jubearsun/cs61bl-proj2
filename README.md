@@ -15,3 +15,12 @@ FileFreqWordsIteratorTest.java
 3. Our next test tests that the iterator returns the correct binary string representation of the next character or word to be returned.  I used convertbinary.com to find the binary string representation of words/characters.  It also tested that the next character/word to be returned was in the correct order as they were in the file.  We tested if the frequent word(s) was (were) at the beginning, end, and middle, or both of the file.
 
 ZipperTest.java
+
+testMakeDirectory():
+1. We have a makeDirectory that uses the java’s file to make directories within directories. This test make sure that when a directory is made the name input is the same as the file’s name. As well as if there is a child in that directory(created using the makeDirectory() method), then child’s get parent file method should be able to get the directory, as well as the directory name. In addition the test also tests that the child of the directory can also have its own children, and it’s children should be able to call get parent file twice to get the original directory. It also make sure that the function allow the directory to have multiple children.
+
+testDeleteExistingFile():
+2.	this test the method to delete directory. At first we try to delete a single file, and make sure it doesn’t exists after we delete it. Then we made a file with another file as its child. The child is then deleted, and check to ensure that it no longer exists, and we also check to make sure that the parent file doesn’t get deleted even if the child folder is deleted. We then add a new child to the parent file, and delete the parent file. Lastly is that we check that the parent file is deleted, as well as it’s children.
+
+testFindTOCLength():
+3.	this test to make sure that findTOCLength returns the correct length of the table of contents. We ran the methods on several zipper files, and manually counting the characters of the table of contents(including newline characters) we then check that the function returns a number that is a correct representation of how many characters are in the table of contents.
