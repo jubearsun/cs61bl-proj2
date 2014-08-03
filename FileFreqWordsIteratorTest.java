@@ -13,6 +13,53 @@ public class FileFreqWordsIteratorTest {
 	@Rule
 	public TemporaryFolder folder = new TemporaryFolder();
 	public File myFile;
+	
+	@Test
+	public void constructor() throws IOException {
+		myFile = folder.newFile("temp");
+		myFile.deleteOnExit();
+		StringBuilder bin = new StringBuilder();
+		String string = "it was the best of times, it was the worst of times";
+		for (Byte b : string.getBytes()) {
+			bin.append(String.format("%8s",
+                Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+		}
+		FileOutputHelper.writeBinStrToFile(bin.toString(), folder.getRoot() + "/temp");
+		FileFreqWordsIterator iterator = new FileFreqWordsIterator(folder.getRoot() + "/temp", 4);
+		
+		assertEquals(iterator.getSorted().size(), 4);
+		assertEquals(iterator.getSorted().get(0), "it");
+		assertEquals(iterator.getSorted().get(1), "was");
+		assertEquals(iterator.getSorted().get(2), "of"); // order doesn't matter here as long as it's in order in the next method
+		assertEquals(iterator.getSorted().get(3), "the");
+		
+		myFile = folder.newFile("booboo");
+		myFile.deleteOnExit();
+		StringBuilder bin2 = new StringBuilder();
+		String string2 = "     ok";
+		for (Byte b : string2.getBytes()) {
+			bin2.append(String.format("%8s",
+                Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+		}
+		FileOutputHelper.writeBinStrToFile(bin2.toString(), folder.getRoot() + "/booboo");
+		FileFreqWordsIterator f = new FileFreqWordsIterator(folder.getRoot() + "/booboo", 4);
+		
+		assertEquals(f.getSorted().size(), 1);
+		assertEquals(f.getSorted().get(0), "ok");
+		
+		myFile = folder.newFile("yum");
+		myFile.deleteOnExit();
+		StringBuilder bin3 = new StringBuilder();
+		String string3 = "     ";
+		for (Byte b : string3.getBytes()) {
+			bin3.append(String.format("%8s",
+                Integer.toBinaryString(b & 0xFF)).replace(' ', '0'));
+		}
+		FileOutputHelper.writeBinStrToFile(bin3.toString(), folder.getRoot() + "/yum");
+		FileFreqWordsIterator i = new FileFreqWordsIterator(folder.getRoot() + "/yum", 4);
+		
+		assertEquals(i.getSorted().size(), 0);
+	}
 
 	@Test
 	public void hasNext() throws IOException {
