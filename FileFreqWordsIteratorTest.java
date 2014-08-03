@@ -194,49 +194,14 @@ public class FileFreqWordsIteratorTest {
 		FileOutputHelper.writeBinStrToFile(binary2.toString(), folder.getRoot() + "/temporary2");
 		FileFreqWordsIterator it = new FileFreqWordsIterator(folder.getRoot() + "/temporary2", 3);
 		
-		assertEquals("0110100101110100", it.next()); //it
-		assertEquals("00100000", it.next());
-		assertEquals("011101110110000101110011", it.next()); // was
-		assertEquals("00100000", it.next());
-		assertEquals("01110100", it.next()); // t
-		assertEquals("01101000", it.next()); // h
-		assertEquals("01100101", it.next()); // e
-		assertEquals("00100000", it.next());
-		assertEquals("01100010", it.next()); // b
-		assertEquals("01100101", it.next()); // e
-		assertEquals("01110011", it.next()); // s
-		assertEquals("01110100", it.next()); // t
-		assertEquals("00100000", it.next());
-		assertEquals("0110111101100110", it.next()); //of
-		assertEquals("00100000", it.next());
-		assertEquals("01110100", it.next()); //t
-		assertEquals("01101001", it.next()); //i
-		assertEquals("01101101", it.next()); //m
-		assertEquals("01100101", it.next()); //e
-		assertEquals("01110011", it.next()); //s
-		assertEquals("00101100", it.next()); //,
-		assertEquals("00100000", it.next());
-		assertEquals("0110100101110100", it.next()); //it
-		assertEquals("00100000", it.next());
-		assertEquals("011101110110000101110011", it.next()); // was
-		assertEquals("00100000", it.next());
-		assertEquals("01110100", it.next()); // t
-		assertEquals("01101000", it.next()); // h
-		assertEquals("01100101", it.next()); // e	
-		assertEquals("00100000", it.next());
-		assertEquals("01110111", it.next()); //w
-		assertEquals("01101111", it.next()); //o
-		assertEquals("01110010", it.next()); //r
-		assertEquals("01110011", it.next()); //s
-		assertEquals("01110100", it.next()); //t
-		assertEquals("00100000", it.next());
-		assertEquals("0110111101100110", it.next()); //of
-		assertEquals("00100000", it.next());
-		assertEquals("01110100", it.next()); //t
-		assertEquals("01101001", it.next()); //i
-		assertEquals("01101101", it.next()); //m
-		assertEquals("01100101", it.next()); //e
-		assertEquals("01110011", it.next()); //s
+		int counter = 0;
+		while (it.hasNext()) {
+			String result = it.next();
+			if (result.length() > 8) {
+				counter++;
+			}
+		}
+		assertEquals(counter, 6);
 		
 		myFile = folder.newFile("temporary3");
 		myFile.deleteOnExit();
