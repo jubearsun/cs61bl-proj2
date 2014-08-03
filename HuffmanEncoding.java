@@ -139,7 +139,7 @@ public class HuffmanEncoding {
 				encoded.append(0);
 			}
 		}
-		FileWriter f = new FileWriter(name);
+		FileWriter f = new FileWriter(name, true);
 		BufferedWriter b = new BufferedWriter(f);
 		b.write(codemapString());
 		b.close();
