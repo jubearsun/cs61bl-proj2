@@ -15,7 +15,6 @@ import org.junit.rules.TemporaryFolder;
 // for all the binary strings I used this tool to look at the characters/words they corresponded to 
 // http://www.convertbinary.com/
 
-
 public class HuffmanEncodingTest {
 	
 	@Rule
@@ -23,7 +22,7 @@ public class HuffmanEncodingTest {
 	public File tempfile;
 	
 	@Test
-	public void generateCodeMap() {
+	public void testGenerateCodeMap() {
 		HuffmanEncoding h = new HuffmanEncoding();
 		HuffmanEncoding.Frequency f1 = h.new Frequency(1, "a");
 		HuffmanEncoding.Frequency f2 = h.new Frequency(2, "b");
@@ -38,7 +37,6 @@ public class HuffmanEncodingTest {
 		assertEquals(i.next().getKey(), tree.getRoot().getLeft().getLeft().getElement());
 		assertEquals(i.next().getKey(), tree.getRoot().getLeft().getRight().getElement());
 		assertEquals(i.next().getKey(), tree.getRoot().getRight().getElement());
-		
 		
 		
 		HuffmanEncoding h2 = new HuffmanEncoding();
@@ -66,7 +64,7 @@ public class HuffmanEncodingTest {
 	}
 	
 	@Test
-	public void HuffmanTreeConstructor() {
+	public void testHuffmanTreeConstructor() {
 		HuffmanEncoding h = new HuffmanEncoding();
 		HuffmanEncoding.Frequency f1 = h.new Frequency(1, "a");
 		HuffmanEncoding.Frequency f2 = h.new Frequency(2, "b");
@@ -102,7 +100,7 @@ public class HuffmanEncodingTest {
 	}
 
 	@Test
-	public void characterCount() throws IOException {
+	public void testCharacterCount() throws IOException {
 		tempfile = folder.newFile("tempfile");
 		tempfile.deleteOnExit();
 		BufferedWriter out = new BufferedWriter(new FileWriter(tempfile));
