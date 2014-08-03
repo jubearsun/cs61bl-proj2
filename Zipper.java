@@ -1,15 +1,12 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
 public class Zipper {
 
 	private ArrayList<File> myFiles;
-	private ArrayList<Integer> fileSizes;
 	private TreeMap<String, String> myLoc;
-	private String myStart;
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
@@ -19,7 +16,7 @@ public class Zipper {
 		}
 		else if (args[0].equals("unzipper")) {
 			Zipper zipper = new Zipper();
-			zipper.deZipper(args[1], args[2]);
+			zipper.dezip(args[1], args[2]);
 		} else {
 			System.out.println("invalid command");
 		}
@@ -27,7 +24,6 @@ public class Zipper {
 	
 	public Zipper() {
 		myFiles = new ArrayList<File>();
-		fileSizes = new ArrayList<Integer>();
 		myLoc = new TreeMap<String, String>();
 	}
 	
@@ -36,21 +32,18 @@ public class Zipper {
 		compressFiles(myName, myStart);
 	}
 	
-	public void deZipper(String input, String output) {
+	public void dezip(String input, String output) {
 		char prev = 0;
 		FileCharIterator decode = new FileCharIterator(input);
 		File outputFile = new File(output);
 		File parentFile;
-		if (outputFile.exists()) {
-			deleteExistingFile(outputFile);
-			outputFile = new File(output);
-		}
+		deleteExistingFile(outputFile);
+		outputFile = new File(output);
 		outputFile.mkdir();
 		parentFile = outputFile;
 		String current = "";
 		String fileName = "";
-		HashMap<String, File> madeFiles = new HashMap<String, File>();
-		int tOCLength = findTOCLength(input);
+		int tocLength = findTOCLength(input);
 		while (decode.hasNext()) {
 			char a = (char) Integer.parseInt(decode.next(), 2);
 			if (prev == ('\n') && a == ('\n')) {
@@ -60,12 +53,7 @@ public class Zipper {
 				current += a;
 			}
 			else if (a == ('/')) {
-				if (!madeFiles.containsKey(current)) {
-					parentFile = makeDirectory(parentFile, current);
-					madeFiles.put(current, parentFile);
-				} else {
-					parentFile = madeFiles.get(current);
-				}
+				parentFile = makeDirectory(parentFile, current);
 				current = "";
 			}
 			else if (a == (',')) {
@@ -74,32 +62,34 @@ public class Zipper {
 			}
 			else if (a == ('\n')) {
 				if (current.equals("-1")) {
-					if (!madeFiles.containsKey(fileName)) {
-						parentFile = makeDirectory(parentFile, fileName);
-						madeFiles.put(fileName, parentFile);
-					}
+					parentFile = makeDirectory(parentFile, fileName);
 				} else {
 					HuffmanEncoding helper = new HuffmanEncoding();
 					int index = Integer.parseInt(current);
 					File newFile = new File(parentFile, fileName);
-					helper.makeDecodeMap(input, newFile.toString(), index + tOCLength);
+					helper.decode(input, newFile.toString(), index + tocLength);
 				}
 				parentFile = outputFile;
 				current = "";
 			}
 			prev = a;
 		}
+		decode.closeStream();
 	}
 	
 	public File makeDirectory(File parent, String name) {
-		File rtnFile = new File(parent, name);
+		File rtnFile;
+		if (parent != null) {
+			rtnFile = new File(parent, name);
+		} else {
+			rtnFile = new File(name);
+		}
 		rtnFile.mkdir();
 		return rtnFile;
 	}
 	
 	public int findTOCLength(String input) {
 		FileCharIterator decode = new FileCharIterator(input);
-		HuffmanEncoding decodeZipper = new HuffmanEncoding();
 		boolean tableOfContents = true;
 		char prev = 0;
 		int i = 0;
@@ -111,20 +101,24 @@ public class Zipper {
 			}
 			prev = a;
 		}
+		decode.closeStream();
 		return i;
 	}
 
 	public void deleteExistingFile(File fileToBeDeleted) {
-		File[] childrenFile = fileToBeDeleted.listFiles();
-		for (int i = 0; i < childrenFile.length; i++) {
-			if (childrenFile[i].isDirectory()) {
-				deleteExistingFile(childrenFile[i]);
-			} else {
-				childrenFile[i].delete();
+		if (fileToBeDeleted.exists()) {
+			File[] childrenFile = fileToBeDeleted.listFiles();
+			for (int i = 0; i < childrenFile.length; i++) {
+				if (childrenFile[i].isDirectory()) {
+					deleteExistingFile(childrenFile[i]);
+				} else {
+					childrenFile[i].delete();
+				}
 			}
+			fileToBeDeleted.delete();
 		}
-		fileToBeDeleted.delete();
 	}
+
 
 	public String generateTOC() {
 		StringBuilder contents = new StringBuilder();
@@ -139,8 +133,6 @@ public class Zipper {
 	
 	public void findFiles(File myFile) throws IOException {
 		if (!myFile.isDirectory()) {
-			System.out.println("Found a file");
-			System.out.println(myFile.toString());
 			myFiles.add(myFile);
 		} else {
 			myFiles.add(myFile);
@@ -176,9 +168,12 @@ public class Zipper {
 		FileWriter fw = new FileWriter(myOutput, true);
 		fw.write(this.generateTOC());
 		fw.close();
-		FileCharIterator myIter = new FileCharIterator("temporary");
-		while (myIter.hasNext()) {
-			FileOutputHelper.writeBinStrToFile(myIter.next(), myOutput);
+		if (tempFile.exists()) {
+			FileCharIterator myIter = new FileCharIterator("temporary");
+			while (myIter.hasNext()) {
+				FileOutputHelper.writeBinStrToFile(myIter.next(), myOutput);
+			}
+			myIter.closeStream();
 		}
 	}
 }
