@@ -28,6 +28,10 @@ public class HuffmanEncoding {
 		}
 	}
 	
+	public TreeMap<String, StringBuilder> getTreeMap() {
+		return myTreeMap;
+	}
+	
 	public ArrayList<Frequency> getFreq() {
 		return myFreq;
 	}
@@ -214,6 +218,10 @@ public class HuffmanEncoding {
 				}
 			} 
 		}
+		
+		public HuffmanNode getRoot() {
+			return myRoot;
+		}
 
 		public HuffmanTree(ArrayList<Frequency> freq){
 			ArrayList<HuffmanNode> treeList = new ArrayList<HuffmanNode>();
@@ -256,6 +264,17 @@ public class HuffmanEncoding {
 				myWeight = frequency;
 				myLeft = left;
 				myRight = right;
+			}
+			
+			public HuffmanNode getLeft() {
+				return myLeft;
+				
+			public HuffmanNode getRight() {
+				return myRight;
+			}
+			
+			public String getElement() {
+				return myElement;
 			}
 
 			public String toString() {
