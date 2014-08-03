@@ -60,7 +60,7 @@ public class FileFreqWordsIteratorTest {
 		
 		assertEquals(i.getSorted().size(), 0);
 	}
-
+	
 	@Test
 	public void hasNext() throws IOException {
 		myFile = folder.newFile("temporary");
@@ -128,7 +128,7 @@ public class FileFreqWordsIteratorTest {
 		freq3.next();
 		assertTrue(!freq3.hasNext());
 	}
-	
+
 	@Test
 	public void next() throws IOException {
 		myFile = folder.newFile("temporary");
@@ -302,8 +302,5 @@ public class FileFreqWordsIteratorTest {
 		assertEquals("00100000", end.next());
 		assertEquals("011010110110100101110100011101000110010101101110", end.next()); // kitten
 	}
-	
-	
-	
 
 }
