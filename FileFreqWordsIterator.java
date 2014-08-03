@@ -36,14 +36,7 @@ public class FileFreqWordsIterator implements Iterator<String>{
 	}
 
     
-    public static void main(String[] args) {
-    	FileFreqWordsIterator freqwords = new FileFreqWordsIterator(args[0], Integer.parseInt(args[1]));
-    	
-    	while (freqwords.hasNext()) {
-    		System.out.println(freqwords.next());
-    	}
 
-    }
     
     public class myComp implements Comparator{
 
