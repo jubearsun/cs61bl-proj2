@@ -47,7 +47,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
     
     public class myComp implements Comparator{
 
-		@Override
 		public int compare(Object o1, Object o2) {
 			Entry obj1 = (Entry) o1;
 			Entry obj2 = (Entry) o2;
@@ -59,7 +58,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
 			return freqComp;
 		}
 		
-		@Override
 		public boolean equals(Object o1) {
 			Entry obj = (Entry) o1;
 			return (((Entry) this).getKey().equals(obj.getKey()));
@@ -120,12 +118,10 @@ public class FileFreqWordsIterator implements Iterator<String>{
     }
     
 
-	@Override
 	public boolean hasNext() {
         return (nextChar != -1);
 	}
 
-	@Override
 	public String next() {		
 		if (this.nextChar == -1) {
             return "";
@@ -182,7 +178,6 @@ public class FileFreqWordsIterator implements Iterator<String>{
         }
 	}
 
-    @Override
     public void remove() {
         throw new UnsupportedOperationException(
                 "FileFreqWordsIterator does not delete from files.");
