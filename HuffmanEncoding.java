@@ -71,7 +71,6 @@ public class HuffmanEncoding {
 		for (int i = 0; i < keysValues.size(); i += 2) {
 			myDecodeMap.put(keysValues.get(i+1), keysValues.get(i));
 		}
-		FileOutputHelper myOutput = new FileOutputHelper();
 		while (decode.hasNext()) {
 			current += decode.next();
 			int i = 0;
@@ -108,7 +107,6 @@ public class HuffmanEncoding {
 			myFreq.add(new Frequency(1, current));	
 		}
 		myFreq.add(new Frequency(1, "EOF"));
-		inputIter.closeStream();
 	}
 
 	public void sortFreq() { 
@@ -148,7 +146,6 @@ public class HuffmanEncoding {
 		b.write(codemapString());
 		b.close();
 		FileOutputHelper.writeBinStrToFile(encoded.toString(), name);
-		sequenceIter.closeStream();
 	}
 
 	public String codemapString() {
@@ -268,7 +265,8 @@ public class HuffmanEncoding {
 			
 			public HuffmanNode getLeft() {
 				return myLeft;
-				
+			}
+			
 			public HuffmanNode getRight() {
 				return myRight;
 			}
