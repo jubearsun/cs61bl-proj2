@@ -25,19 +25,15 @@ testDeleteExistingFile():
 testFindTOCLength():
 3.	this test to make sure that findTOCLength returns the correct length of the table of contents. We ran the methods on several zipper files, and manually counting the characters of the table of contents(including newline characters) we then check that the function returns a number that is a correct representation of how many characters are in the table of contents.
 
-4.	
 testSingleFile()
-tests that the zippercan compress and then decompress a single file with no other directories involved except for the output one
+4. tests that the zippercan compress and then decompress a single file with no other directories involved except for the output one
 
-5.
 testDirectoryWithSingleFile()
-tests that the zipper can compress and then decompress a single file inside a single directory, with no other directories nested inside the original one
+5. tests that the zipper can compress and then decompress a single file inside a single directory, with no other directories nested inside the original one
 
-6.
 testEmptyDirectories()
-tests that the zipper can compress and then decompress a series of directories with no actual files
+6. tests that the zipper can compress and then decompress a series of directories with no actual files
 
-7,
 testMultpleFolders()
-tests that the zipper can compress and then decompress a directory that contains multiple other directories and multiple files
+7. tests that the zipper can compress and then decompress a directory that contains multiple other directories and multiple files
 
