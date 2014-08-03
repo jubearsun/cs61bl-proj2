@@ -8,10 +8,8 @@ Huu Pham cs61bl-bf
 
 HuffmanEncodingTest.java
 1. characterCount test tested that given a file, the frequencies of each binary string representation of a character in the file had the correct weight, or frequency.  Since we had added all the characters and their weights to an ArrayList of frequencies we simply checked that each index of the ArrayList contained the correct frequency for the file.
-
-testEncodeAndDecode()
-It's difficult to test if two compressed files are equal because differing implementations of encode can result in different file structures. In order to test encode, we encoded two of the sample files and then decoded them, verifying that both worked by iterating over the decoded files to make sure they were the same as the originals. 
-
+2. generateCodeMap test tested that our codemaps were correct, by manually adding frequencies to an ArrayList that we use to construct a HuffmanTree. We then checked that the Huffman tree's structure matched the code mapping by manually creating the tree ourselves and tracking the left and right values of the Huffman tree and ensuring that each entry belongs where it is.
+3. HuffmanTreeConstructor test tested the constructor for the HuffmanTree, one with different frequencies and one for different words that had the same frequency.
 
 FileFreqWordsIteratorTest.java
 1. Our constructor test tests the size of the sorted, an ArrayList we wrote in FileFreqWordsIterator that contains the n most frequent words that appear in the file.  So if n = 4, the size of sorted should also be 4.  We also tested that each index of the ArrayList contained a String object that corresponded to the n most frequent words.
@@ -40,14 +38,4 @@ testEmptyDirectories()
 
 testMultpleFolders()
 7. tests that the zipper can compress and then decompress a directory that contains multiple other directories and multiple files
-
-Runtimes
-
-Encode, O(n log n)
-
-The first part of encode involves counting the frequency of characters and creating frequency objects. This requires iterating over the entire input file, or O(n) time where n is the number of characters in the input file. Next, encode sort's these frequency objects using Comparable and Collections.sort, which after some research, should take O(k log k) time where k are the number of elements to sort. In the worst case, k = n (every character in the input is unique), so O(n log n). Constructing the huffman tree next should take O(n log n) time as well, making n calls to the put method which takes O(log n). Generating the codemap requires visiting all n nodes in the huffman tree, or n recusive calls (linear time). Finally, making the actual compressed file iterates over the original file, taking O(n) time as before. Overall then, our encode method should be O(n log n) time. 
-
-Decode, O(n log n)
-
-The first part of decode involves iterating over the input file and deciphering the codemap header. This should take O(1) time as the headers are all relatively the same length. The method then adds each line of the codemap to a TreeMap, which should take O(log n) time. Next, decode iterates over the rest of the file and checks tries to find strings of bits in the TreeMap, which should take O(n log n) time.
 
